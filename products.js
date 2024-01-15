@@ -4,11 +4,16 @@ const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*\=\s*([^;]*).*$
 axios.defaults.headers.common['Authorization'] = token;
 const url = 'https://vue3-course-api.hexschool.io/v2'; // 請加入站點
 const path = 'rock'; // 請加入個人 API Path
+let myModal = '';
+let delModal = '';
 createApp({
     data() {
         return {
             products: [],
-            tempProduct: {}
+            isNew: true,
+            tempProduct: {
+                imagesUrl: [],
+            }
         }
     },
     methods: {
@@ -30,9 +35,64 @@ createApp({
                 .catch((error) => {
                     console.dir(error)
                 })
+        },
+        openModal(status, item = {}) {
+            if (status === 'new') {
+                this.tempProduct = {
+                    imagesUrl: [],
+                };
+                myModal.show();
+                this.isNew = true
+            } else if (status === 'edit') {
+                this.tempProduct = {...item }
+                myModal.show();
+                this.isNew = false;
+            } else if (status === 'delete') {
+                this.tempProduct = {...item }
+                delModal.show();
+            }
+
+        },
+        updateProduct() {
+            if (this.isNew) {
+                axios.post(`${url}/api/${path}/admin/product`, { data: this.tempProduct })
+                    .then((res) => {
+                        alert(res.data.message);
+                        this.getProducts();
+                        myModal.hide();
+                    })
+                    .catch((error) => {
+                        alert(error.response.data.message);
+                        myModal.hide();
+                    })
+            } else {
+                axios.put(`${url}/api/${path}/admin/product/${this.tempProduct.id}`, { data: this.tempProduct })
+                    .then((res) => {
+                        alert(res.data.message)
+                        this.getProducts();
+                        myModal.hide();
+                    }).catch((error) => {
+                        alert(error.response.data.message)
+                        myModal.hide();
+                    })
+            }
+        },
+        deleteProduct() {
+            axios.delete(`${url}/api/${path}/admin/product/${this.tempProduct.id}`)
+                .then((res) => {
+                    alert(res.data.message)
+                    this.getProducts();
+                    delModal.hide();
+                }).catch((error) => {
+                    alert(error.response.data.message)
+                    delModal.hide();
+                })
+
         }
     },
     mounted() {
+        myModal = new bootstrap.Modal(document.querySelector('#productModal'))
+        delModal = new bootstrap.Modal(document.querySelector('#delProductModal'))
         this.checkLogin();
     }
 

@@ -88,7 +88,11 @@ createApp({
                     delModal.hide();
                 })
 
-        }
+        },
+        createImages() {
+            this.tempProduct.imagesUrl = []
+            this.tempProduct.imagesUrl.push('')
+        },
     },
     mounted() {
         myModal = new bootstrap.Modal(document.querySelector('#productModal'))

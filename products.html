@@ -77,8 +77,9 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="mb-2">
+                                    <h3 class="mb-3">主要圖片</h3>
                                     <div class="mb-3">
-                                        <label for="imageUrl" class="form-label">主要圖片</label>
+                                        <label for="imageUrl" class="form-label">輸入圖片網址</label>
                                         <input type="text" class="form-control" placeholder="請輸入圖片連結" v-model="tempProduct.imageUrl">
                                         <img class="img-fluid" :src="tempProduct.imageUrl">
                                     </div>
@@ -93,16 +94,21 @@
                                     </div>
                                     <img class="img-fluid" :src="image" alt="">
                                     </template>
-                                </div>
-                                <div v-if="!tempProduct.imagesUrl || tempProduct.imagesUrl[tempProduct.imagesUrl.length-1]">
-                                    <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProduct.imagesUrl.push('')">
-                        新增圖片
-                      </button>
+                                    <div v-if="!tempProduct.imagesUrl.length || tempProduct.imagesUrl[tempProduct.imagesUrl.length-1]">
+                                        <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProduct.imagesUrl.push('')">
+                                        新增圖片
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <button class="btn btn-outline-danger btn-sm d-block w-100" @click="tempProduct.imagesUrl.pop()">
+                                        刪除圖片
+                                        </button>
+                                    </div>
                                 </div>
                                 <div v-else>
-                                    <button class="btn btn-outline-danger btn-sm d-block w-100" @click="tempProduct.imagesUrl.pop()">
-                        刪除圖片
-                      </button>
+                                    <button class="btn btn-outline-primary btn-sm d-block w-100" @click="tempProduct.imagesUrl.push('')">
+                                    新增圖片
+                                    </button>
                                 </div>
                             </div>
                             <div class="col-sm-8">
